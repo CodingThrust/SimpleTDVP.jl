@@ -25,9 +25,9 @@ using SimpleTDVP, Test, SimpleTDVP.OMEinsum, LinearAlgebra, Random
     @test op * x0 ≈ y
     # update site
     eng, A, S, B, err = SimpleTDVP.update_sites(r; Dmax=10, atol=1e-10)
-    x0 = vec(ein"ceh,hjm->cejm"(A, B))
-    @show eng ≈ x0' * op * x0
-    @test eng <= real(e1)
+    x = vec(ein"ceh,hjm->cejm"(A, B))
+    @show eng ≈ x' * op * x
+    @test eng <= real(e1)/norm(x0)^2
 end
 
 @testset "dmrg" begin
