@@ -1,0 +1,23 @@
+name = "SimpleTDVP"
+uuid = "a441f0a6-3fb3-489d-a227-e7095b4ada16"
+authors = ["GiggleLiu"]
+version = "1.0.0-DEV"
+
+[deps]
+KrylovKit = "0b1a1467-8014-51b9-945f-bf0ae24f4b77"
+LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
+LinearOperators = "5c8ed15e-5a4c-59e4-a42b-c7e8811fb125"
+OMEinsum = "ebe7aa44-baf0-506c-a96f-8464559b3922"
+
+[compat]
+KrylovKit = "0.7"
+LinearAlgebra = "1"
+LinearOperators = "2"
+OMEinsum = "0.8"
+julia = "1"
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Test"]
