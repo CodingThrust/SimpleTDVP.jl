@@ -69,6 +69,13 @@ function Base.vec(mps::MPS)
     return vec(code(mps.tensors...))
 end
 
+
+# the energy function
+# ... - a - C - f - D - k - ...
+#           |       |
+#           d       i       
+#           |       |
+# ... - c - A - h - B - m - ...
 function code_dot(bra::MPS, ket::MPS; optimizer=GreedyMethod())
     store = IndexStore()
     ixs_bra = Vector{Int}[]

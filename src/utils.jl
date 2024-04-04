@@ -3,7 +3,7 @@ struct IndexStore{LT}
 end
 IndexStore() = IndexStore(Int[])
 Base.length(store::IndexStore) = length(store.indices)
-function newindex!(store::IndexStore{LT}) where LT
+function newindex!(store::IndexStore{LT}) where LT <: Integer
     index = length(store) == 0 ? 1 : store.indices[end] + 1
     push!(store.indices, index)
     return index
