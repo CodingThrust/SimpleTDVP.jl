@@ -2,7 +2,7 @@ module SimpleTDVP
 
 using LinearAlgebra, OMEinsum, LinearOperators, KrylovKit
 using LuxorGraphPlot: Node, Connection, Luxor
-using Yao
+using Yao, Random
 import Yao: mat
 import LuxorGraphPlot
 
@@ -12,7 +12,7 @@ export left_move!, right_move!, canonical_move!, is_canonicalized, canonical_cen
 export mat, MPO, code_mpo2mat, mat2mpo, rand_mpo
 export heisenberg_mpo, transverse_ising_mpo
 export dot, sandwich, compress!, num_of_elements
-export dmrg!, dmrg
+export dmrg!, dmrg, idmrg
 export TensorLayout
 
 include("utils.jl")
@@ -21,6 +21,7 @@ include("mps.jl")
 include("mpo.jl")
 include("mpsormpo.jl")
 include("dmrg.jl")
+include("idmrg.jl")
 include("visualize.jl")
 
 end

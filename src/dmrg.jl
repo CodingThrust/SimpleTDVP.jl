@@ -59,58 +59,6 @@ function dmrg!(mps::MPS{T}, mpo::MPO{T}; nsweeps, atol=1e-10, Dmax=typemax(Int))
     return DMRGResult(eng, mps, truncation_error, convergence_error)
 end
 
-function idmrg!(mps::MPS{T}, mpo::MPO{T}; nsweeps, atol=1e-10, Dmax=typemax(Int)) where T
-    @assert nsite(mps) == nsite(mpo) "The number of sites in MPS and MPO are different"
-    @assert nflavor(mps) == nflavor(mpo) "The number of flavors in MPS and MPO are different"
-    to_right_canonical!(mps)
-    left_env = empty(mps.tensors)
-    right_env = [fill!(similar(mps.tensors[end], 1, 1, 1), one(T))]
-    for i=nsite(mps):-1:3   # update the right environment 3:nsite(mps)
-        push!(right_env, update_right_env(right_env[end], mps.tensors[i], mpo.tensors[i]))
-    end
-    convergence_error = eng = eng_prev = real(T)(Inf)
-    truncation_error = zero(real(T))
-    for k = 1:nsweeps
-        for i = 1:nsite(mps)-1  # NOTE: site `1` is unneseccary to update, but is convenient to have
-            # update site i, i+1
-            if i == 1
-                L = fill!(similar(mps.tensors[1], 1, 1, 1), one(T))
-            else
-                L = update_left_env(left_env[end], mps.tensors[i-1], mpo.tensors[i-1])
-            end
-            push!(left_env, L)
-            r = DMRGRuntime(mps.tensors[i], mps.tensors[i+1], mpo.tensors[i], mpo.tensors[i+1], L, pop!(right_env))
-            eng, A, S, B, err = update_sites(r; Dmax, atol)
-            B .*= reshape(S, :, 1, 1)
-            truncation_error += err
-            @info "Sweep = $k (right moving), site = ($i, $(i+1)), energy = $eng, bond size = $(length(S)), error = $err"
-            mps.tensors[i], mps.tensors[i+1] = A, B
-            right_move!(mps, Dmax=Dmax, atol=atol)
-        end
-        #push!(right_env, fill!(similar(mps.tensors[end], 1, 1, 1), one(T)))
-        for i = nsite(mps):-1:2  # NOTE: site `nsite(mps)` is unneseccary to update, but is convenient to have
-            # update site i-1, i
-            if i == nsite(mps)
-                R = fill!(similar(mps.tensors[end], 1, 1, 1), one(T))
-            else
-                R = update_right_env(right_env[end], mps.tensors[i+1], mpo.tensors[i+1])
-            end
-            push!(right_env, R)
-            r = DMRGRuntime(mps.tensors[i-1], mps.tensors[i], mpo.tensors[i-1], mpo.tensors[i], pop!(left_env), R)
-            eng, A, S, B, err = update_sites(r; Dmax, atol)
-            A .*= reshape(S, 1, 1, :)
-            truncation_error += err
-            @info "Sweep = $k (left moving), site = ($(i-1), $i), energy = $eng, bond size = $(length(S)), error = $err"
-            mps.tensors[i-1], mps.tensors[i] = A, B
-            left_move!(mps, Dmax=Dmax, atol=atol)
-        end
-        convergence_error = eng_prev - eng
-        eng_prev = eng
-    end
-    return DMRGResult(eng, mps, truncation_error, convergence_error)
-end
-
-
 struct DMRGRuntime{T, ST<:AbstractArray{T, 3}, OT<:AbstractArray{T, 4}, TL<:AbstractArray{T, 3}, TR<:AbstractArray{T, 3}}
     A::ST
     B::ST
