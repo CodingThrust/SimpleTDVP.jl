@@ -1,4 +1,4 @@
-using Test, SimpleTDVP
+using Test, SimpleTDVP, Yao
 
 @testset "MPO conversion" begin
     m = randn(ComplexF64, 2^5, 2^5)
@@ -35,4 +35,12 @@ end
     @test num_of_elements(mpo2) == 1*2*2*4 + 4*2*2*10 + 10*2*2*10 + 10*2*2*4 + 4*2*2*1
     @test mat(mpo2) ≈ mat(mpo)
     @test SimpleTDVP.check_canonical(mpo2)
+end
+
+@testset "heisenberg" begin
+    n = 7
+    mpo = heisenberg_mpo(ComplexF64, n)
+    @test nsite(mpo) == n
+    h = EasyBuild.heisenberg(n; periodic=false)
+    @test mat(mpo) ≈ mat(h)
 end

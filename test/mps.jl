@@ -58,3 +58,13 @@ end
     @test vec(mps2) ≈ vec(mps)
     @test SimpleTDVP.check_canonical(mps2)
 end
+
+@testset "special mps" begin
+    mps = ghz_mps(ComplexF64, 3)
+    @test vec(mps) ≈ [1, 0, 0, 0, 0, 0, 0, 1]/sqrt(2)
+    @test SimpleTDVP.check_canonical(mps)
+    tensors = [randn(ComplexF64, 2) for _=1:3]
+    mps = product_mps(tensors...)
+    @test vec(mps) ≈ kron(tensors[end:-1:1]...)
+    @test SimpleTDVP.check_canonical(mps)
+end

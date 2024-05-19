@@ -110,3 +110,15 @@ function sandwich(bra::MPS, op::MPO, ket::MPS)
     code = code_sandwich(bra, op, ket)
     return code(conj.(bra.tensors)..., op.tensors..., ket.tensors...)[]
 end
+
+function heisenberg_mpo(::Type{T}, n::Int) where T
+    @assert n > 1
+    tensor1 = zeros(T, 1, 2, 2, 5)
+    tensor2 = zeros(T, 5, 2, 2, 5)
+    tensor3 = zeros(T, 5, 2, 2, 1)
+    tensor1[1, :, :, 1] = tensor2[1, :, :, 1] = tensor2[5, :, :, 5] = tensor3[5, :, :, 1] = Matrix{T}(I2)
+    tensor1[1, :, :, 2] = tensor2[2, :, :, 5] = tensor2[1, :, :, 2] = tensor3[2, :, :, 1] = Matrix{T}(X)
+    tensor1[1, :, :, 3] = tensor2[3, :, :, 5] = tensor2[1, :, :, 3] = tensor3[3, :, :, 1] = Matrix{T}(Y)
+    tensor1[1, :, :, 4] = tensor2[4, :, :, 5] = tensor2[1, :, :, 4] = tensor3[4, :, :, 1] = Matrix{T}(Z)
+    MPO([tensor1, fill(tensor2, n-2)..., tensor3])
+end
