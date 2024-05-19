@@ -44,3 +44,19 @@ end
     h = EasyBuild.heisenberg(n; periodic=false)
     @test mat(mpo) ≈ mat(h)
 end
+
+@testset "transverse ising" begin
+    n = 7
+    h = 0.0
+    mpo = transverse_ising_mpo(ComplexF64, n, h)
+    @test nsite(mpo) == n
+    h = EasyBuild.transverse_ising(n, h; periodic=false)
+    @test mat(mpo) ≈ mat(h)
+
+    n = 7
+    h = 0.2
+    mpo = transverse_ising_mpo(ComplexF64, n, h)
+    @test nsite(mpo) == n
+    h = EasyBuild.transverse_ising(n, h; periodic=false)
+    @test mat(mpo) ≈ mat(h)
+end

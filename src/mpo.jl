@@ -122,3 +122,14 @@ function heisenberg_mpo(::Type{T}, n::Int) where T
     tensor1[1, :, :, 4] = tensor2[4, :, :, 5] = tensor2[1, :, :, 4] = tensor3[4, :, :, 1] = Matrix{T}(Z)
     MPO([tensor1, fill(tensor2, n-2)..., tensor3])
 end
+
+function transverse_ising_mpo(::Type{T}, n::Int, h::Real) where T
+    @assert n > 1
+    tensor1 = zeros(T, 1, 2, 2, 3)
+    tensor2 = zeros(T, 3, 2, 2, 3)
+    tensor3 = zeros(T, 3, 2, 2, 1)
+    tensor1[1, :, :, 1] = tensor2[1, :, :, 1] = tensor2[3, :, :, 3] = tensor3[3, :, :, 1] = Matrix{T}(I2)
+    tensor1[1, :, :, 2] = tensor2[2, :, :, 3] = tensor2[1, :, :, 2] = tensor3[2, :, :, 1] = Matrix{T}(Z)
+    tensor1[1, :, :, 3] = tensor2[1, :, :, 3] = tensor3[1, :, :, 1] = Matrix{T}(X) .* h
+    MPO([tensor1, fill(tensor2, n-2)..., tensor3])
+end

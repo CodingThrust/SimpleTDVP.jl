@@ -10,7 +10,7 @@ export MPS, nsite, nflavor, vec2mps, IndexStore, newindex!, code_mps2vec, rand_m
 export product_mps, ghz_mps
 export left_move!, right_move!, canonical_move!, is_canonicalized, canonical_center, to_left_canonical!, to_right_canonical!
 export mat, MPO, code_mpo2mat, mat2mpo, rand_mpo
-export heisenberg_mpo
+export heisenberg_mpo, transverse_ising_mpo
 export dot, sandwich, compress!, num_of_elements
 export dmrg!, dmrg
 export TensorLayout
