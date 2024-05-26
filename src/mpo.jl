@@ -106,7 +106,7 @@ function code_sandwich(bra::MPS, op::MPO, ket::MPS; optimizer=GreedyMethod())
     return optimize_code(DynamicEinCode(ixs, Int[]), size_dict, optimizer)
 end
 
-function sandwich(bra::MPS, op::MPO, ket::MPS)
+function Yao.sandwich(bra::MPS, op::MPO, ket::MPS)
     code = code_sandwich(bra, op, ket)
     return code(conj.(bra.tensors)..., op.tensors..., ket.tensors...)[]
 end
