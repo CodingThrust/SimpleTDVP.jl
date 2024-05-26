@@ -12,3 +12,7 @@ end
 @testset "dmrg" begin
     include("dmrg.jl")
 end
+
+@testset "vumps" begin
+    include("vumps.jl")
+end

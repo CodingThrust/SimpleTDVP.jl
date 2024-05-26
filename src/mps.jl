@@ -119,12 +119,5 @@ function ghz_mps(::Type{T}, n::Int) where T
 end
 
 function aklt_mps(::Type{T}, n::Int) where T
-    @assert n >= 2
-    state1 = zeros(T, 1, 3, 3)
-    state1[1, 1, 1] = state1[1, 2, 2] = state1[1, 3, 3] = 1/sqrt(3)
-    state2 = zeros(T, 3, 3, 3)
-    state2[1, 1, 1] = state2[2, 2, 2] = state2[3, 3, 3] = 1
-    state3 = zeros(T, 3, 3, 1)
-    state3[1, 1, 1] = state3[2, 2, 1] = state3[3, 3, 1] = 1
-    return MPS([state1, fill(state2, n-2)..., state3])
+    # TODO
 end

@@ -21,6 +21,7 @@ include("mps.jl")
 include("mpo.jl")
 include("mpsormpo.jl")
 include("dmrg.jl")
+include("vumps.jl")
 include("visualize.jl")
 
 end
